@@ -1,0 +1,22 @@
+[
+    [
+  {
+    "id": 1,
+    "nombre": "María Pérez",
+    "rol": "Agente Inmobiliario",
+    "sector": "Ventas"
+  },
+  {
+    "id": 2,
+    "nombre": "Lucas Fernández",
+    "rol": "Administrativo",
+    "sector": "Administración"
+  },
+  {
+    "id": 3,
+    "nombre": "Sofía Gómez",
+    "rol": "Contador",
+    "sector": "Contabilidad"
+  }
+]
+]

@@ -15,6 +15,8 @@ app.use("/filtros", filtrosRoutes);
 app.get("/", (req, res) => {
   res.send("¡Hola mundo!");
 });
+
+
 app.listen(port, () => {
   console.log(`Servidor corriendo en http://localhost:${port}`);
 });

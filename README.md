@@ -7,7 +7,7 @@ Proyecto grupal de desarrollo backend con Node.js y Express.
 - `tareas/`: CRUD de tareas (Sabri)
 - `empleados/`: Alta de empleados (Fede)
 - `filtros/`: Filtros y vistas Pug (Ale)
-- `rutas/`: Rutas para tareas (Joaquín)
+- `middlewares/`: Middlewares (Joaquín)
 - `data/`: Archivos JSON compartidos (Damian)
 
 ## Comandos

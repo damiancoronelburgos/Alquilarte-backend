@@ -6,9 +6,21 @@ const {
   createTarea,
   updateTarea,
   deleteTarea,
+  obtenerTareas
 } = require('./tareas.controller');
 
-// Rutas reales para el CRUD
+//ruta fija para mostrar la vista con Pug 
+router.get('/vista', async (req, res) => {
+  try {
+    const tareas = await obtenerTareas();
+    console.log("Desde /vista:", tareas); // Verificación en consola
+    res.render('tareas/tareas.views.pug', { tareas });
+  } catch (error) {
+    res.status(500).send('Error al cargar la vista');
+  }
+});
+
+//  rutas CRUD 
 router.get('/', getAllTareas);
 router.get('/:id', getTareaById);
 router.post('/', createTarea);

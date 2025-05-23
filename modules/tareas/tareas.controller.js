@@ -1,6 +1,6 @@
 const { leerTareas, guardarTareas } = require('./tareas.model');
 
-// Mostrar todas las tareas (formato API)
+
 async function getAllTareas(req, res) {
   try {
     const tareas = await leerTareas();
@@ -10,7 +10,7 @@ async function getAllTareas(req, res) {
   }
 }
 
-// Mostrar una sola tarea por ID
+
 async function getTareaById(req, res) {
   const tareas = await leerTareas();
   const tarea = tareas.find(t => t.id === parseInt(req.params.id));
@@ -21,7 +21,7 @@ async function getTareaById(req, res) {
   }
 }
 
-// Crear una nueva tarea
+
 async function createTarea(req, res) {
   const tareas = await leerTareas();
   const nuevaTarea = {
@@ -33,7 +33,7 @@ async function createTarea(req, res) {
   res.status(201).json(nuevaTarea);
 }
 
-// Actualizar una tarea existente
+
 async function updateTarea(req, res) {
   const tareas = await leerTareas();
   const index = tareas.findIndex(t => t.id === parseInt(req.params.id));
@@ -46,7 +46,7 @@ async function updateTarea(req, res) {
   }
 }
 
-// Eliminar una tarea
+
 async function deleteTarea(req, res) {
   const tareas = await leerTareas();
   const nuevasTareas = tareas.filter(t => t.id !== parseInt(req.params.id));
@@ -57,7 +57,7 @@ async function deleteTarea(req, res) {
   res.json({ mensaje: 'Tarea eliminada correctamente' });
 }
 
-// Función auxiliar para la vista Pug (no responde con JSON)
+// Función auxiliar para la vista Pug
 async function obtenerTareas() {
   const tareas = await leerTareas();
   return tareas;
@@ -69,5 +69,5 @@ module.exports = {
   createTarea,
   updateTarea,
   deleteTarea,
-  obtenerTareas // Usada en la vista Pug
+  obtenerTareas 
 };

@@ -5,11 +5,11 @@ const errorHandler = require('./middlewares/errorHandler');
 const app = express();
 const port = 3000;
 
-// Pug - Sabri
 app.set('view engine', 'pug');
-app.set('views', './modules'); // Asegurate de que las vistas .pug estén dentro de "modules"
+app.set('views', './views');
 
 app.use(express.json());
+app.use(express.static('public'));
 
 // Usar el middleware propio para cada solicitud
 app.use(requestLogger);
@@ -24,6 +24,11 @@ app.use('/login', loginRoutes);
 app.use("/tareas", tareasRoutes);
 app.use("/empleados", empleadosRoutes);
 app.use("/filtros", filtrosRoutes);
+
+// Vista pug de empleados
+app.get('/empleados-vista', (req, res) => {
+  res.render('empleados');
+});
 
 app.get("/", (req, res) => {
   res.send("¡Hola mundo!");

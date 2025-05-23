@@ -13,8 +13,7 @@ const {
 router.get('/vista', async (req, res) => {
   try {
     const tareas = await obtenerTareas();
-    console.log("Desde /vista:", tareas); // Verificación en consola
-    res.render('tareas/tareas.views.pug', { tareas });
+    res.render('tareas', { tareas });
   } catch (error) {
     res.status(500).send('Error al cargar la vista');
   }

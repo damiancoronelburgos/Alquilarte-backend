@@ -9,7 +9,7 @@ const {
   obtenerTareas
 } = require('./tareas.controller');
 
-//ruta fija para mostrar la vista con Pug 
+// la vista con Pug 
 router.get('/vista', async (req, res) => {
   try {
     const tareas = await obtenerTareas();
@@ -20,7 +20,7 @@ router.get('/vista', async (req, res) => {
   }
 });
 
-//  rutas CRUD 
+//  rutas CRUD para thunder client
 router.get('/', getAllTareas);
 router.get('/:id', getTareaById);
 router.post('/', createTarea);

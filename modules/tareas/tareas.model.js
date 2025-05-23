@@ -4,7 +4,7 @@ const path = require('path');
 // Ruta al archivo tareas.json
 const dataPath = path.join(__dirname, '../../data/tareas.json');
 
-// Leer tareas desde el archivo
+
 async function leerTareas() {
   try {
     const data = await fs.readFile(dataPath, 'utf-8');
@@ -15,7 +15,7 @@ async function leerTareas() {
   }
 }
 
-// Guardar tareas en el archivo
+
 async function guardarTareas(tareas) {
   try {
     await fs.writeFile(dataPath, JSON.stringify(tareas, null, 2));

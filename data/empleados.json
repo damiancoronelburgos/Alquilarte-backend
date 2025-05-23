@@ -2,18 +2,21 @@
   {
     "id": 1,
     "nombre": "María Pérez",
+    "password": "maria123",
     "rol": "Agente Inmobiliario",
     "sector": "Ventas"
   },
   {
     "id": 2,
     "nombre": "Lucas Fernández",
+    "password": "lucas123",
     "rol": "Administrativo",
     "sector": "Administración"
   },
   {
     "id": 3,
     "nombre": "Sofía Gómez",
+    "password": "sofia123",
     "rol": "Contador",
     "sector": "Contabilidad"
   }

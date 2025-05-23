@@ -1,0 +1,109 @@
+extends layout
+
+block content
+  h1 Gestión de Empleados
+
+  h2 Lista actual
+  table
+    thead
+      tr
+        th Nombre
+        th Rol
+        th Sector
+        th Acciones
+    tbody#lista-empleados
+
+  h2 Alta de empleado
+  form#form-agregar
+    input(type="text", name="nombre", placeholder="Nombre" required)
+    input(type="text", name="rol", placeholder="Rol" required)
+    input(type="text", name="sector", placeholder="Sector" required)
+    button(type="submit") Agregar
+
+  h2 Modificar empleado
+  form#form-editar(style="display:none;")
+    input(type="hidden", name="id")
+    input(type="text", name="nombre", placeholder="Nuevo Nombre" required)
+    input(type="text", name="rol", placeholder="Nuevo Rol" required)
+    input(type="text", name="sector", placeholder="Nuevo Sector" required)
+    button(type="submit") Editar
+
+  script.
+    const lista = document.getElementById('lista-empleados');
+    const formAgregar = document.getElementById('form-agregar');
+    const formEditar = document.getElementById('form-editar');
+
+    function cargarEmpleados() {
+      fetch('/empleados')
+        .then(res => res.json())
+        .then(data => {
+          lista.innerHTML = '';
+          data.forEach(emp => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td><strong>${emp.nombre}</strong></td>
+              <td>${emp.rol}</td>
+              <td>${emp.sector}</td>
+              <td>
+                <button onclick="eliminarEmpleado('${emp.id}')">Eliminar</button>
+                <button onclick="prepararEdicion('${emp.id}', '${emp.nombre}', '${emp.rol}', '${emp.sector}')">Editar</button>
+              </td>
+            `;
+            lista.appendChild(tr);
+          });
+        });
+    }
+
+    function eliminarEmpleado(id) {
+      fetch('/empleados/' + id, { method: 'DELETE' })
+        .then(res => {
+          if (res.ok) cargarEmpleados();
+        });
+    }
+
+    function prepararEdicion(id, nombre, rol, sector) {
+      formEditar.style.display = 'block';
+      formEditar.id.value = id;
+      formEditar.nombre.value = nombre;
+      formEditar.rol.value = rol;
+      formEditar.sector.value = sector;
+      window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    formAgregar.addEventListener('submit', e => {
+      e.preventDefault();
+      const datos = Object.fromEntries(new FormData(formAgregar));
+      fetch('/empleados', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(datos)
+      }).then(res => {
+        if (res.ok) {
+          formAgregar.reset();
+          cargarEmpleados();
+        }
+      });
+    });
+
+    formEditar.addEventListener('submit', e => {
+      e.preventDefault();
+      const id = formEditar.id.value;
+      const datos = {
+        nombre: formEditar.nombre.value,
+        rol: formEditar.rol.value,
+        sector: formEditar.sector.value
+      };
+      fetch('/empleados/' + id, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(datos)
+      }).then(res => {
+        if (res.ok) {
+          formEditar.reset();
+          formEditar.style.display = 'none';
+          cargarEmpleados();
+        }
+      });
+    });
+
+    cargarEmpleados();

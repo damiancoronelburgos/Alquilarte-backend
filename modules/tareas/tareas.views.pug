@@ -1,0 +1,48 @@
+doctype html
+html
+  head
+    title Lista de Tareas
+    style.
+      table {
+        border-collapse: collapse;
+        width: 90%;
+        margin: 20px auto;
+        font-family: Arial, sans-serif;
+      }
+      th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+      }
+      th {
+        background-color: #4CAF50;
+        color: white;
+      }
+      .pendiente { background-color:rgb(255, 210, 64); }
+      .en-proceso { background-color:rgb(71, 253, 238); }
+      .finalizada { background-color:rgb(143, 247, 8); }
+  body
+    h1(style="text-align:center") Lista de Tareas
+    if tareas.length
+      table
+        thead
+          tr
+            th ID
+            th Título
+            th Descripción
+            th Estado
+            th Prioridad
+            th Área
+            th Fecha
+        tbody
+          each tarea in tareas
+            tr(class=tarea.estado.replace(' ', '-'))
+              td #{tarea.id}
+              td #{tarea.titulo}
+              td #{tarea.descripcion}
+              td #{tarea.estado}
+              td #{tarea.prioridad}
+              td #{tarea.area}
+              td #{tarea.fecha}
+    else
+      p No hay tareas para mostrar.

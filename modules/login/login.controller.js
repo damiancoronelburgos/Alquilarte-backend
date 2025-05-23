@@ -1,5 +1,6 @@
 // modules/login/login.controller.js
-const empleados = require('../empleados/empleados.json');
+//const empleados = require('../empleados/empleados.json');
+const empleados = require('../../data/empleados.json'); // tuve que cambiar ruta ya que no me deja visualizar en pug por mal hubicada(sabri)
 
 function login(req, res, next) {
   const { id, nombre } = req.body;

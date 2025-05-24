@@ -30,6 +30,12 @@ app.get('/empleados-vista', (req, res) => {
   res.render('empleados');
 });
 
+// Vista pug de tareas
+
+
+
+
+
 app.get("/", (req, res) => {
   res.send("¡Hola mundo!");
 });

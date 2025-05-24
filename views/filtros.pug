@@ -1,0 +1,19 @@
+doctype html
+html
+  head
+    title Tareas Filtradas
+  body
+    h1 Resultado del Filtro
+
+    if tareas.length
+      each tarea in tareas
+        div(style="border:1px solid #ccc; margin:10px; padding:10px")
+          h2= tarea.titulo
+          p Área: #{tarea.area}
+          p Estado: #{tarea.estado}
+          p Prioridad: #{tarea.prioridad}
+          p Fecha: #{tarea.fecha}
+          p Encargado ID: #{tarea.asignadoA}
+    else
+      p No se encontraron tareas con esos filtros.
+<!--Alejandro -->

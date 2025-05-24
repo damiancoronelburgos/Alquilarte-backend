@@ -2,27 +2,11 @@ doctype html
 html
   head
     title Lista de Tareas
-    style.
-      table {
-        border-collapse: collapse;
-        width: 90%;
-        margin: 20px auto;
-        font-family: Arial, sans-serif;
-      }
-      th, td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: center;
-      }
-      th {
-        background-color: #4CAF50;
-        color: white;
-      }
-      .pendiente { background-color:rgb(255, 210, 64); }
-      .en-proceso { background-color:rgb(71, 253, 238); }
-      .finalizada { background-color:rgb(143, 247, 8); }
+    link(rel='stylesheet', href='/styles.css')
   body
+
     h1(style="text-align:center") Lista de Tareas
+
     if tareas.length
       table
         thead
@@ -34,6 +18,7 @@ html
             th Prioridad
             th Área
             th Fecha
+            th Acciones
         tbody
           each tarea in tareas
             tr(class=tarea.estado.replace(' ', '-'))
@@ -44,74 +29,134 @@ html
               td #{tarea.prioridad}
               td #{tarea.area}
               td #{tarea.fecha}
+              td
+                button.editar(type="button", onclick=`cargarTareaEnFormulario(${JSON.stringify(tarea)})`) Editar
+                button.eliminar(type="button", onclick=`eliminarTarea(${tarea.id})`) Eliminar
     else
       p No hay tareas para mostrar.
 
+    div#mensaje
 
-h1(style="text-align: center") Filtros
+    hr
+    h2(style="text-align:center") Crear / Editar Tarea
 
-style.
-  .menu {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 20px;
-  }
-  .menu a {
-    padding: 10px 20px;
-    background-color: #007BFF;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    font-weight: bold;
-    cursor: pointer;
-  }
-  .menu a:hover {
-    background-color: #0056b3;
-  }
-  .submenu {
-    display: none;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 20px;
-  }
-  .submenu a {
-    background-color:rgb(213, 231, 217);
-  }
+    form#formTarea
+      input(type="hidden", name="id")
+      input(type="text", name="titulo", placeholder="Título", required)
+      input(type="text", name="descripcion", placeholder="Descripción", required)
+      select(name="estado")
+        option(value="pendiente") Pendiente
+        option(value="en proceso") En proceso
+        option(value="finalizada") Finalizada
+      select(name="prioridad")
+        option(value="alta") Alta
+        option(value="media") Media
+        option(value="baja") Baja
+      select(name="area")
+        option(value="Ventas") Ventas
+        option(value="Administración") Administración
+      input(type="date", name="fecha", required)
+      button(type="submit") Guardar Tarea
+      button.boton-cancelar(type="button", onclick="limpiarFormulario()") Cancelar
 
-div.menu
-  a(onclick='toggleSubmenu("submenu-estado")') Estado
-  a(onclick='toggleSubmenu("submenu-prioridad")') Prioridad
-  a(onclick='toggleSubmenu("submenu-area")') Área
+    h1(style="text-align: center") Filtros
 
-div.submenu#submenu-estado
-  a(href='/filtros/vista?estado=pendiente') Pendiente  
-  a(href='/filtros/vista?estado=en%20proceso') En proceso 
-  a(href='/filtros/vista?estado=finalizada') Finalizada 
+    div.menu
+      a(onclick='toggleSubmenu("submenu-estado")') Estado
+      a(onclick='toggleSubmenu("submenu-prioridad")') Prioridad
+      a(onclick='toggleSubmenu("submenu-area")') Área
 
-div.submenu#submenu-prioridad
-  a(href='/filtros/vista?prioridad=alta') Alta
-  a(href='/filtros/vista?prioridad=media') Media 
-  a(href='/filtros/vista?prioridad=baja') Baja
+    div.submenu#submenu-estado
+      a(href='/filtros/vista?estado=pendiente') Pendiente  
+      a(href='/filtros/vista?estado=en%20proceso') En proceso 
+      a(href='/filtros/vista?estado=finalizada') Finalizada 
 
-div.submenu#submenu-area
-  a(href='/filtros/vista?area=ventas') Ventas
-  a(href='/filtros/vista?area=administracion') Administración
+    div.submenu#submenu-prioridad
+      a(href='/filtros/vista?prioridad=alta') Alta
+      a(href='/filtros/vista?prioridad=media') Media 
+      a(href='/filtros/vista?prioridad=baja') Baja
 
-table
+    div.submenu#submenu-area
+      a(href='/filtros/vista?area=ventas') Ventas
+      a(href='/filtros/vista?area=administracion') Administración
 
-script.
-  function toggleSubmenu(id) {
-    const submenus = document.querySelectorAll('.submenu');
-    submenus.forEach(sm => {
-      if (sm.id === id) {
-        sm.style.display = sm.style.display === 'flex' ? 'none' : 'flex';
-      } else {
-        sm.style.display = 'none';
+    script.
+      function toggleSubmenu(id) {
+        const submenus = document.querySelectorAll('.submenu');
+        submenus.forEach(sm => {
+          sm.style.display = sm.id === id && sm.style.display !== 'flex' ? 'flex' : 'none';
+        });
       }
-    });
-  }
 
+    script.
+      const form = document.getElementById('formTarea');
+      const mensaje = document.getElementById('mensaje');
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const data = {
+          titulo: form.titulo.value,
+          descripcion: form.descripcion.value,
+          estado: form.estado.value,
+          prioridad: form.prioridad.value,
+          area: form.area.value,
+          fecha: form.fecha.value,
+        };
+
+        const id = form.id.value;
+        const res = await fetch(id ? `/tareas/${id}` : '/tareas', {
+          method: id ? 'PUT' : 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+
+        if (res.ok) {
+          mostrarMensaje(id ? 'Tarea actualizada con éxito' : 'Tarea creada con éxito', true);
+          form.reset();
+          form.id.value = '';
+          setTimeout(() => location.reload(), 1500);
+        } else {
+          mostrarMensaje('Error al guardar tarea', false);
+        }
+      });
+
+      function cargarTareaEnFormulario(tarea) {
+        form.id.value = tarea.id;
+        form.titulo.value = tarea.titulo;
+        form.descripcion.value = tarea.descripcion;
+        form.estado.value = tarea.estado;
+        form.prioridad.value = tarea.prioridad;
+        form.area.value = tarea.area;
+        form.fecha.value = tarea.fecha;
+        window.scrollTo({ top: form.offsetTop, behavior: 'smooth' });
+      }
+
+      async function eliminarTarea(id) {
+        if (confirm('¿Estás seguro de que querés eliminar esta tarea?')) {
+          const res = await fetch(`/tareas/${id}`, { method: 'DELETE' });
+          if (res.ok) {
+            mostrarMensaje('Tarea eliminada con éxito', true);
+            setTimeout(() => location.reload(), 1500);
+          } else {
+            mostrarMensaje('Error al eliminar la tarea', false);
+          }
+        }
+      }
+
+      function mostrarMensaje(texto, esExito) {
+        mensaje.textContent = texto;
+        mensaje.className = esExito ? 'exito' : 'error';
+        mensaje.style.display = 'block';
+        setTimeout(() => {
+          mensaje.style.display = 'none';
+        }, 3000);
+      }
+
+      function limpiarFormulario() {
+        form.reset();
+        form.id.value = '';
+      }
 
 
 table

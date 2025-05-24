@@ -1,4 +1,8 @@
-const { leerEmpleados, guardarEmpleados } = require('./empleados.model');
+const {
+  leerEmpleados,
+  guardarEmpleados,
+  leerSectoresRoles,
+} = require('./empleados.model');
 
 async function obtenerEmpleados(req, res, next) {
   try {
@@ -13,7 +17,6 @@ async function crearEmpleado(req, res, next) {
   try {
     const empleados = await leerEmpleados();
 
-    // Validación: usuario ya existe
     const existe = empleados.some(e => e.usuario === req.body.usuario);
     if (existe) {
       const err = new Error('El nombre de usuario ya está en uso');
@@ -75,9 +78,19 @@ async function eliminarEmpleado(req, res, next) {
   }
 }
 
+async function obtenerSectoresRoles(req, res, next) {
+  try {
+    const data = await leerSectoresRoles();
+    res.json(data);
+  } catch (err) {
+    next(err);
+  }
+}
+
 module.exports = {
   obtenerEmpleados,
   crearEmpleado,
   actualizarEmpleado,
   eliminarEmpleado,
+  obtenerSectoresRoles,
 };

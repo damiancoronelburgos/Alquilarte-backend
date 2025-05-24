@@ -1,31 +1,26 @@
-// modules/login/login.controller.js
-//const empleados = require('../empleados/empleados.json');
-const empleados = require('../../data/empleados.json'); // tuve que cambiar ruta ya que no me deja visualizar en pug por mal hubicada(sabri)
+const { leerEmpleados } = require('../empleados/empleados.model');
 
-function login(req, res, next) {
-  const { id, nombre } = req.body;
+async function login(req, res, next) {
+  const { usuario, password } = req.body;
 
-  // Validación básica de payload
-  if (typeof id !== 'number' || typeof nombre !== 'string') {
-    const err = new Error('Debe enviar un id (número) y nombre (texto)');
+  if (typeof usuario !== 'string' || typeof password !== 'string') {
+    const err = new Error('Debe enviar usuario y contraseña válidos');
     err.status = 400;
     return next(err);
   }
 
-  // Buscar empleado
-  const empleado = empleados.find(e => e.id === id && e.nombre === nombre);
+  try {
+    const empleados = await leerEmpleados();
+    const empleado = empleados.find(e => e.usuario === usuario && e.password === password);
 
-  if (empleado) {
-    // Usuario válido
-    return res.json({
-      mensaje: 'Login exitoso',
-      empleado
-    });
-  } else {
-    // Credenciales inválidas
-    const err = new Error('ID o nombre incorrectos');
-    err.status = 401;
-    return next(err);
+    if (empleado) {
+      // Redirigir al menú o guardar sesión (opcional)
+      return res.redirect('/menu');
+    } else {
+      return res.status(401).render('login', { error: 'Usuario o contraseña incorrectos' });
+    }
+  } catch (err) {
+    next(err);
   }
 }
 

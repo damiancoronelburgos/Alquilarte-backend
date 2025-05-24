@@ -10,6 +10,7 @@ app.set('view engine', 'pug');
 app.set('views', './views');
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 // Middleware propio
@@ -31,6 +32,10 @@ app.get('/menu', (req, res) => {
   res.render('menu');
 });
 
+app.get('/login-vista', (req, res) => {
+  res.render('login', { error: null });
+});
+
 app.get('/empleados-vista', (req, res) => {
   res.render('empleados');
 });
@@ -44,8 +49,8 @@ app.get('/tareas/vista', (req, res) => {
 });
 
 // Ruta raíz
-app.get("/", (req, res) => {
-  res.send("¡Hola mundo!");
+app.get('/', (req, res) => {
+  res.redirect('/login-vista');
 });
 
 // Ruta para probar errores

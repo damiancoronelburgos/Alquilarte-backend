@@ -100,3 +100,14 @@ tr:hover {
     display: none;
   }
 }
+
+.login-container {
+  max-width: 400px;
+  margin: 5em auto;
+  padding: 2em;
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}

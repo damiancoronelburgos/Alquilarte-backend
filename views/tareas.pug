@@ -46,3 +46,85 @@ html
               td #{tarea.fecha}
     else
       p No hay tareas para mostrar.
+
+
+h1(style="text-align: center") Filtros
+
+style.
+  .menu {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .menu a {
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  .menu a:hover {
+    background-color: #0056b3;
+  }
+  .submenu {
+    display: none;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .submenu a {
+    background-color:rgb(213, 231, 217);
+  }
+
+div.menu
+  a(onclick='toggleSubmenu("submenu-estado")') Estado
+  a(onclick='toggleSubmenu("submenu-prioridad")') Prioridad
+  a(onclick='toggleSubmenu("submenu-area")') Área
+
+div.submenu#submenu-estado
+  a(href='/filtros/vista?estado=pendiente') Pendiente  
+  a(href='/filtros/vista?estado=en%20proceso') En proceso 
+  a(href='/filtros/vista?estado=finalizada') Finalizada 
+
+div.submenu#submenu-prioridad
+  a(href='/filtros/vista?prioridad=alta') Alta
+  a(href='/filtros/vista?prioridad=media') Media 
+  a(href='/filtros/vista?prioridad=baja') Baja
+
+div.submenu#submenu-area
+  a(href='/filtros/vista?area=ventas') Ventas
+  a(href='/filtros/vista?area=administracion') Administración
+
+table
+
+script.
+  function toggleSubmenu(id) {
+    const submenus = document.querySelectorAll('.submenu');
+    submenus.forEach(sm => {
+      if (sm.id === id) {
+        sm.style.display = sm.style.display === 'flex' ? 'none' : 'flex';
+      } else {
+        sm.style.display = 'none';
+      }
+    });
+  }
+
+
+
+table
+
+
+
+
+
+
+
+
+
+      //filtros
+
+       a(href='/filtros/vista') Filtros
+

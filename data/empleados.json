@@ -1,23 +1,29 @@
 [
   {
     "id": 1,
-    "nombre": "María Pérez",
+    "nombre": "María",
+    "apellido": "Pérez",
+    "usuario": "mperez",
     "password": "maria123",
-    "rol": "Agente Inmobiliario",
+    "rol": "Agente inmobiliario",
     "sector": "Ventas"
   },
   {
     "id": 2,
-    "nombre": "Lucas Fernández",
+    "nombre": "Lucas",
+    "apellido": "Fernández",
+    "usuario": "lfernandez",
     "password": "lucas123",
-    "rol": "Administrativo",
+    "rol": "Secretario/a administrativo",
     "sector": "Administración"
   },
   {
     "id": 3,
-    "nombre": "Sofía Gómez",
+    "nombre": "Sofía",
+    "apellido": "Gómez",
+    "usuario": "sgomez",
     "password": "sofia123",
-    "rol": "Contador",
+    "rol": "Contador/a",
     "sector": "Contabilidad"
   }
 ]

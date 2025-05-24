@@ -12,12 +12,25 @@ async function obtenerEmpleados(req, res, next) {
 async function crearEmpleado(req, res, next) {
   try {
     const empleados = await leerEmpleados();
+
+    // Validación: usuario ya existe
+    const existe = empleados.some(e => e.usuario === req.body.usuario);
+    if (existe) {
+      const err = new Error('El nombre de usuario ya está en uso');
+      err.status = 400;
+      throw err;
+    }
+
     const nuevoEmpleado = {
       id: empleados.length > 0 ? Math.max(...empleados.map(e => e.id)) + 1 : 1,
       nombre: req.body.nombre,
+      apellido: req.body.apellido,
+      usuario: req.body.usuario,
+      password: req.body.password,
       sector: req.body.sector,
-      rol: req.body.rol,
+      rol: req.body.rol
     };
+
     empleados.push(nuevoEmpleado);
     await guardarEmpleados(empleados);
     res.status(201).json(nuevoEmpleado);
@@ -32,7 +45,6 @@ async function actualizarEmpleado(req, res, next) {
     const empleados = await leerEmpleados();
     const index = empleados.findIndex(e => e.id === Number(id));
     if (index === -1) {
-      // Puedes crear un error para que pase por errorHandler
       const err = new Error('Empleado no encontrado');
       err.status = 404;
       throw err;
@@ -63,12 +75,9 @@ async function eliminarEmpleado(req, res, next) {
   }
 }
 
-
 module.exports = {
   obtenerEmpleados,
   crearEmpleado,
   actualizarEmpleado,
   eliminarEmpleado,
 };
-
-
